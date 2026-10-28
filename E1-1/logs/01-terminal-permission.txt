@@ -1,0 +1,61 @@
+$ pwd
+/mnt/c/Users/noh hui sun/AppData/Local/Temp
+$ mkdir -p ~/codyssey/practice
+$ cd ~/codyssey/practice && pwd
+/home/nhs/codyssey/practice
+$ touch .hidden empty.txt
+$ echo "hello codyssey" > note.txt
+$ ls
+empty.txt
+note.txt
+$ ls -la
+total 12
+drwxr-xr-x 2 nhs nhs 4096 Oct 29 08:40 .
+drwxr-xr-x 3 nhs nhs 4096 Oct 29 08:40 ..
+-rw-r--r-- 1 nhs nhs    0 Oct 29 08:40 .hidden
+-rw-r--r-- 1 nhs nhs    0 Oct 29 08:40 empty.txt
+-rw-r--r-- 1 nhs nhs   15 Oct 29 08:40 note.txt
+$ mkdir docs
+$ cp note.txt docs/note-copy.txt
+$ mv docs/note-copy.txt docs/note-renamed.txt
+$ cat docs/note-renamed.txt
+hello codyssey
+$ cd docs && pwd && cd .. && pwd
+/home/nhs/codyssey/practice/docs
+/home/nhs/codyssey/practice
+$ echo "절대경로:" && realpath docs/note-renamed.txt && echo "상대경로: docs/note-renamed.txt"
+절대경로:
+/home/nhs/codyssey/practice/docs/note-renamed.txt
+상대경로: docs/note-renamed.txt
+$ rm empty.txt && ls -la
+total 16
+drwxr-xr-x 3 nhs nhs 4096 Oct 29 08:40 .
+drwxr-xr-x 3 nhs nhs 4096 Oct 29 08:40 ..
+-rw-r--r-- 1 nhs nhs    0 Oct 29 08:40 .hidden
+drwxr-xr-x 2 nhs nhs 4096 Oct 29 08:40 docs
+-rw-r--r-- 1 nhs nhs   15 Oct 29 08:40 note.txt
+$ rm -r docs && ls -la
+total 12
+drwxr-xr-x 2 nhs nhs 4096 Oct 29 08:40 .
+drwxr-xr-x 3 nhs nhs 4096 Oct 29 08:40 ..
+-rw-r--r-- 1 nhs nhs    0 Oct 29 08:40 .hidden
+-rw-r--r-- 1 nhs nhs   15 Oct 29 08:40 note.txt
+
+== 권한 실습 ==
+$ touch perm.txt && mkdir permdir
+$ ls -ld perm.txt permdir
+-rw-r--r-- 1 nhs nhs    0 Oct 29 08:40 perm.txt
+drwxr-xr-x 2 nhs nhs 4096 Oct 29 08:40 permdir
+$ stat -c "%a %A %n" perm.txt permdir
+644 -rw-r--r-- perm.txt
+755 drwxr-xr-x permdir
+$ chmod 600 perm.txt && chmod 700 permdir
+$ stat -c "%a %A %n" perm.txt permdir
+600 -rw------- perm.txt
+700 drwx------ permdir
+$ chmod 644 perm.txt && chmod 755 permdir
+$ stat -c "%a %A %n" perm.txt permdir
+644 -rw-r--r-- perm.txt
+755 drwxr-xr-x permdir
+$ chmod +x perm.txt && stat -c "%a %A %n" perm.txt
+755 -rwxr-xr-x perm.txt
