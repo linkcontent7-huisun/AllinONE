@@ -1,0 +1,11 @@
+# 멀티 컨테이너: web(nginx) + client(alpine). 같은 네트워크에서 서비스 이름 'web'으로 통신한다.
+services:
+  web:
+    build: ../web
+    ports:
+      - "8091:80"
+  client:
+    image: alpine:latest
+    command: sleep 600
+    depends_on:
+      - web

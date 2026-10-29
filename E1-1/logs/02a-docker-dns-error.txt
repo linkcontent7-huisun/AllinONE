@@ -1,0 +1,54 @@
+$ docker --version
+Docker version 29.9.2, build a82e528
+
+$ docker info --format Server={{.ServerVersion}} OS={{.OperatingSystem}} Containers={{.Containers}} Images={{.Images}}
+Server=29.9.2 OS=Docker Desktop Containers=1 Images=1
+
+$ docker pull hello-world
+Using default tag: latest
+Error response from daemon: failed to resolve reference "docker.io/library/hello-world:latest": failed to do request: Head "https://registry-1.docker.io/v2/library/hello-world/manifests/latest": dialing registry-1.docker.io:443 container via direct connection because Docker Desktop has no HTTPS proxy: connecting to registry-1.docker.io:443: dial tcp: lookup registry-1.docker.io: no such host
+
+$ docker run --name hello1 hello-world
+Unable to find image 'hello-world:latest' locally
+docker: Error response from daemon: failed to resolve reference "docker.io/library/hello-world:latest": failed to do request: Head "https://registry-1.docker.io/v2/library/hello-world/manifests/latest": dialing registry-1.docker.io:443 container via direct connection because Docker Desktop has no HTTPS proxy: connecting to registry-1.docker.io:443: dial tcp: lookup registry-1.docker.io: no such host
+
+Run 'docker run --help' for more information
+
+$ docker pull ubuntu:24.04
+Error response from daemon: failed to resolve reference "docker.io/library/ubuntu:24.04": failed to do request: Head "https://registry-1.docker.io/v2/library/ubuntu/manifests/24.04": dialing registry-1.docker.io:443 container via direct connection because Docker Desktop has no HTTPS proxy: connecting to registry-1.docker.io:443: dial tcp: lookup registry-1.docker.io: no such host
+
+$ docker run --name ub1 ubuntu:24.04 bash -c ls / | head -5; echo hello-from-ubuntu
+Unable to find image 'ubuntu:24.04' locally
+docker: Error response from daemon: failed to resolve reference "docker.io/library/ubuntu:24.04": failed to do request: Head "https://registry-1.docker.io/v2/library/ubuntu/manifests/24.04": dialing registry-1.docker.io:443 container via direct connection because Docker Desktop has no HTTPS proxy: connecting to registry-1.docker.io:443: dial tcp: lookup registry-1.docker.io: no such host
+
+Run 'docker run --help' for more information
+
+$ docker images
+IMAGE              ID             DISK USAGE   CONTENT SIZE   EXTRA
+n8nio/n8n:latest   c5861e6016c8       2.26GB          380MB   U    
+
+$ docker ps -a
+CONTAINER ID   IMAGE       COMMAND                   CREATED        STATUS                    PORTS     NAMES
+d7b2e09ec61e   n8nio/n8n   "tini -- /docker-ent…"   2 months ago   Exited (0) 2 months ago             n8n
+
+$ docker logs ub1
+Error response from daemon: No such container: ub1
+
+$ docker run -d --name sleeper ubuntu:24.04 sleep 600
+Unable to find image 'ubuntu:24.04' locally
+docker: Error response from daemon: failed to resolve reference "docker.io/library/ubuntu:24.04": failed to do request: Head "https://registry-1.docker.io/v2/library/ubuntu/manifests/24.04": dialing registry-1.docker.io:443 container via direct connection because Docker Desktop has no HTTPS proxy: connecting to registry-1.docker.io:443: dial tcp: lookup registry-1.docker.io: no such host
+
+Run 'docker run --help' for more information
+
+$ docker exec sleeper bash -c echo exec-ok; hostname
+Error response from daemon: No such container: sleeper
+
+$ docker stats --no-stream
+
+$ docker stop sleeper
+Error response from daemon: No such container: sleeper
+
+$ docker ps -a
+CONTAINER ID   IMAGE       COMMAND                   CREATED        STATUS                    PORTS     NAMES
+d7b2e09ec61e   n8nio/n8n   "tini -- /docker-ent…"   2 months ago   Exited (0) 2 months ago             n8n
+

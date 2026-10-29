@@ -1,0 +1,90 @@
+$ docker --version
+Docker version 29.9.2, build a82e528
+
+$ docker info --format Server={{.ServerVersion}} OS={{.OperatingSystem}}
+Server=29.9.2 OS=Docker Desktop
+
+$ docker run --name hello1 hello-world
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+    (amd64)
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker ID:
+ https://hub.docker.com/
+
+For more examples and ideas, visit:
+ https://docs.docker.com/get-started/
+
+
+$ docker pull ubuntu:24.04
+24.04: Pulling from library/ubuntu
+7a48b8f0e5c7: Pulling fs layer
+98144013299c: Download complete
+7a48b8f0e5c7: Download complete
+7a48b8f0e5c7: Pull complete
+Digest: sha256:fe81560990fae86dc4743202b2cb4d3df98d0bcf949173cecef15ce1127ef852
+Status: Downloaded newer image for ubuntu:24.04
+docker.io/library/ubuntu:24.04
+
+$ docker run --name ub1 ubuntu:24.04 bash -c ls / | head -5; echo hello-from-ubuntu
+bin
+boot
+dev
+etc
+home
+hello-from-ubuntu
+
+$ docker images
+IMAGE                ID             DISK USAGE   CONTENT SIZE   EXTRA
+alpine:latest        be2656061b53         13MB         3.94MB        
+hello-world:latest   c567b231f656       25.9kB         9.49kB   U    
+n8nio/n8n:latest     c5861e6016c8       2.26GB          380MB   U    
+ubuntu:24.04         fe81560990fa        119MB         31.7MB   U    
+
+$ docker ps -a
+CONTAINER ID   IMAGE          COMMAND                   CREATED         STATUS                     PORTS     NAMES
+8f2d1ac85c18   ubuntu:24.04   "bash -c 'ls / | hea…"   1 second ago    Exited (0) 1 second ago              ub1
+df9b2d2ae20f   hello-world    "/hello"                  8 seconds ago   Exited (0) 7 seconds ago             hello1
+d7b2e09ec61e   n8nio/n8n      "tini -- /docker-ent…"   2 months ago    Exited (0) 2 months ago              n8n
+
+$ docker logs ub1
+bin
+boot
+dev
+etc
+home
+hello-from-ubuntu
+
+$ docker run -d --name sleeper ubuntu:24.04 sleep 600
+cf2838470a6a7621dfb4c622884f3fa3579d88cc9146e73a4c6463399453d759
+
+$ docker exec sleeper bash -c echo exec-ok; hostname
+exec-ok
+cf2838470a6a
+
+$ docker stats --no-stream
+CONTAINER ID   NAME      CPU %     MEM USAGE / LIMIT   MEM %     NET I/O      BLOCK I/O   PIDS
+cf2838470a6a   sleeper   0.00%     944KiB / 15.41GiB   0.01%     910B / 84B   0B / 0B     1
+
+$ docker stop sleeper
+sleeper
+
+$ docker ps -a
+CONTAINER ID   IMAGE          COMMAND                   CREATED          STATUS                                PORTS     NAMES
+cf2838470a6a   ubuntu:24.04   "sleep 600"               6 seconds ago    Exited (137) Less than a second ago             sleeper
+8f2d1ac85c18   ubuntu:24.04   "bash -c 'ls / | hea…"   8 seconds ago    Exited (0) 8 seconds ago                        ub1
+df9b2d2ae20f   hello-world    "/hello"                  15 seconds ago   Exited (0) 14 seconds ago                       hello1
+d7b2e09ec61e   n8nio/n8n      "tini -- /docker-ent…"   2 months ago     Exited (0) 2 months ago                         n8n
+

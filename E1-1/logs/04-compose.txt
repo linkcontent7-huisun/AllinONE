@@ -1,0 +1,186 @@
+$ docker compose up -d --build
+ Image e1-1-web:compose Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 585B 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 514B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/nginx:alpine
+#3 DONE 0.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 2B done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 61B done
+#5 DONE 0.0s
+
+#6 [1/2] FROM docker.io/library/nginx:alpine@sha256:785835ea65db4bba6f021acc0f3be91b0fef76a53fe41f8588c6698d2aed0606
+#6 resolve docker.io/library/nginx:alpine@sha256:785835ea65db4bba6f021acc0f3be91b0fef76a53fe41f8588c6698d2aed0606 0.0s done
+#6 DONE 0.0s
+
+#7 [2/2] COPY site/ /usr/share/nginx/html/
+#7 CACHED
+
+#8 exporting to image
+#8 exporting layers done
+#8 exporting manifest sha256:c5e7e2d6d64706d33a2d754bf988efa1e34a61e76263b70274a5b93eeea18907 0.0s done
+#8 exporting config sha256:ee6ca93b4e4a6114dcc6a0911e37fd9506137559e5a45b40d1939f04c24cdfb0 0.0s done
+#8 exporting attestation manifest sha256:a5ac40d9ddc886037412bb66f68ee19093a8a2ebd41cbdbf3d996f6edd0e65ab 0.0s done
+#8 exporting manifest list sha256:82773ebbc9f3231b32a3e11fc2150e8e27556cfc00efb139c83f7f9aa3b644e3 0.0s done
+#8 naming to docker.io/library/e1-1-web:compose done
+#8 unpacking to docker.io/library/e1-1-web:compose done
+#8 DONE 0.1s
+
+#9 resolving provenance for metadata file
+#9 DONE 0.0s
+ Image e1-1-web:compose Built 
+ Network compose-single_default Creating 
+ Network compose-single_default Creating 
+ Network compose-single_default Created 
+ Network compose-single_default Created 
+ Container compose-web Creating 
+ Container compose-web Created 
+ Container compose-web Starting 
+ Container compose-web Started 
+
+$ docker compose ps
+NAME          IMAGE              COMMAND                   SERVICE   CREATED        STATUS                  PORTS
+compose-web   e1-1-web:compose   "/docker-entrypoint.…"   web       1 second ago   Up Less than a second   0.0.0.0:8090->80/tcp, [::]:8090->80/tcp
+
+$ curl -s http://localhost:8090
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>E1-1 작업실</title></head>
+<body><h1>E1-1 컨테이너 웹 서버</h1><p>Dockerfile로 만든 커스텀 nginx 이미지입니다. v1</p></body></html>
+
+$ docker compose logs --tail 3 web
+compose-web  | 2026/10/29 09:23:00 [notice] 1#1: start worker process 50
+compose-web  | 2026/10/29 09:23:00 [notice] 1#1: start worker process 51
+compose-web  | 172.18.0.1 - - [29/Oct/2026:09:23:01 +0000] "GET / HTTP/1.1" 200 221 "-" "curl/8.21.0" "-"
+
+$ docker compose exec web printenv APP_MODE
+dev
+
+$ docker compose down
+ Container compose-web Stopping 
+ Container compose-web Stopped 
+ Container compose-web Removing 
+ Container compose-web Removed 
+ Network compose-single_default Removing 
+ Network compose-single_default Removed 
+
+# 환경변수로 포트·모드 변경 (HOST_PORT=8095 APP_MODE=prod)
+$ docker compose up -d
+ Network compose-single_default Creating 
+ Network compose-single_default Creating 
+ Network compose-single_default Created 
+ Network compose-single_default Created 
+ Container compose-web Creating 
+ Container compose-web Created 
+ Container compose-web Starting 
+ Container compose-web Started 
+
+$ docker compose ps
+NAME          IMAGE              COMMAND                   SERVICE   CREATED        STATUS                  PORTS
+compose-web   e1-1-web:compose   "/docker-entrypoint.…"   web       1 second ago   Up Less than a second   0.0.0.0:8095->80/tcp, [::]:8095->80/tcp
+
+$ curl -s -o /dev/null -w port 8095 http=%{http_code}\n http://localhost:8095
+port 8095 http=200
+
+$ docker compose exec web printenv APP_MODE
+prod
+
+$ docker compose down
+ Container compose-web Stopping 
+ Container compose-web Stopped 
+ Container compose-web Removing 
+ Container compose-web Removed 
+ Network compose-single_default Removing 
+ Network compose-single_default Removed 
+
+$ docker compose up -d --build
+ Image compose-multi-web Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 585B 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 514B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/nginx:alpine
+#3 DONE 0.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 2B done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 61B done
+#5 DONE 0.0s
+
+#6 [1/2] FROM docker.io/library/nginx:alpine@sha256:785835ea65db4bba6f021acc0f3be91b0fef76a53fe41f8588c6698d2aed0606
+#6 resolve docker.io/library/nginx:alpine@sha256:785835ea65db4bba6f021acc0f3be91b0fef76a53fe41f8588c6698d2aed0606 0.0s done
+#6 DONE 0.0s
+
+#7 [2/2] COPY site/ /usr/share/nginx/html/
+#7 CACHED
+
+#8 exporting to image
+#8 exporting layers done
+#8 exporting manifest sha256:d19855851d18dc8870e8c5b3340369f795b8655e37b3f8e85e460663e04ff07d 0.0s done
+#8 exporting config sha256:9f6699f11f4b4a0ce28ee8d8a050ec07a00107d05466a40beb200aaa30faa950 0.0s done
+#8 exporting attestation manifest sha256:d5bdd49a07a91dd1fba4435fa4adb52250f33f433500d1dd921c455cd24e5d34 0.0s done
+#8 exporting manifest list sha256:70f5abdea9c7106b553ea1d78e073a306f1ec89a600ff2eaed002f6a89e481e5
+#8 exporting manifest list sha256:70f5abdea9c7106b553ea1d78e073a306f1ec89a600ff2eaed002f6a89e481e5 0.0s done
+#8 naming to docker.io/library/compose-multi-web:latest done
+#8 unpacking to docker.io/library/compose-multi-web:latest 0.0s done
+#8 DONE 0.2s
+
+#9 resolving provenance for metadata file
+#9 DONE 0.0s
+ Image compose-multi-web Built 
+ Network compose-multi_default Creating 
+ Network compose-multi_default Creating 
+ Network compose-multi_default Created 
+ Network compose-multi_default Created 
+ Container compose-multi-web-1 Creating 
+ Container compose-multi-web-1 Created 
+ Container compose-multi-client-1 Creating 
+ Container compose-multi-client-1 Created 
+ Container compose-multi-web-1 Starting 
+ Container compose-multi-web-1 Started 
+ Container compose-multi-client-1 Starting 
+ Container compose-multi-client-1 Started 
+
+$ docker compose ps
+NAME                     IMAGE               COMMAND                   SERVICE   CREATED         STATUS        PORTS
+compose-multi-client-1   alpine:latest       "sleep 600"               client    2 seconds ago   Up 1 second   
+compose-multi-web-1      compose-multi-web   "/docker-entrypoint.…"   web       2 seconds ago   Up 1 second   0.0.0.0:8091->80/tcp, [::]:8091->80/tcp
+
+$ docker compose exec client wget -qO- http://web
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>E1-1 작업실</title></head>
+<body><h1>E1-1 컨테이너 웹 서버</h1><p>Dockerfile로 만든 커스텀 nginx 이미지입니다. v1</p></body></html>
+
+$ docker compose logs --tail 3 web
+web-1  | 2026/10/29 09:23:10 [notice] 1#1: start worker process 50
+web-1  | 2026/10/29 09:23:10 [notice] 1#1: start worker process 51
+web-1  | 172.18.0.3 - - [29/Oct/2026:09:23:12 +0000] "GET / HTTP/1.1" 200 221 "-" "Wget" "-"
+
+$ docker compose down
+ Container compose-multi-client-1 Stopping 
+ Container compose-multi-client-1 Stopped 
+ Container compose-multi-client-1 Removing 
+ Container compose-multi-client-1 Removed 
+ Container compose-multi-web-1 Stopping 
+ Container compose-multi-web-1 Stopped 
+ Container compose-multi-web-1 Removing 
+ Container compose-multi-web-1 Removed 
+ Network compose-multi_default Removing 
+ Network compose-multi_default Removed 
+

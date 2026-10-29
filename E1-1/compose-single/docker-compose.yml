@@ -1,0 +1,10 @@
+# 단일 서비스: docker run 명령을 문서화된 실행 설정으로 바꾼 것
+services:
+  web:
+    build: ../web
+    image: e1-1-web:compose
+    container_name: compose-web
+    ports:
+      - "${HOST_PORT:-8090}:80"   # 환경변수로 호스트 포트를 바꾼다 (기본 8090)
+    environment:
+      APP_MODE: ${APP_MODE:-dev}   # 설정과 코드의 분리
