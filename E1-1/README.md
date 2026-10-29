@@ -27,7 +27,7 @@
 - [x] 트러블슈팅 2건 이상 (3건 기록) → 6절
 - [x] 민감정보 마스킹 (이메일 일부 마스킹)
 
-보너스: [x] Compose 기초 · [x] Compose 멀티 · [x] Compose 운영 명령 · [x] 환경변수 → 9절 · [ ] SSH 키
+보너스: [x] Compose 기초 · [x] Compose 멀티 · [x] Compose 운영 명령 · [x] 환경변수 → 9절 · [x] SSH 키 → 10절
 
 ## 4) 수행 로그 — 터미널 조작 + 권한 (WSL Ubuntu)
 전체 원본: [logs/01-terminal-permission.txt](logs/01-terminal-permission.txt)
@@ -115,3 +115,10 @@ $ curl -s http://localhost:8081   → 동일
 - 환경변수: `HOST_PORT=8095 APP_MODE=prod`를 주입하자 8095 포트 200 응답, 컨테이너 안 `APP_MODE`가 `prod`로 바뀌었다(기본값은 8090/dev).
 - 멀티: [compose-multi/docker-compose.yml](compose-multi/docker-compose.yml)에서 web과 client 2개를 함께 실행했고, `client`가 `wget http://web`으로 서비스 이름만으로 웹 서버 응답을 받았다(같은 네트워크의 서비스 디스커버리).
 - 운영 명령 `up` `down` `ps` `logs`를 모두 수행했다.
+
+## 10) 보너스 — GitHub SSH 키 (원본: [logs/05-ssh.txt](logs/05-ssh.txt))
+- `ssh-keygen -t ed25519`로 키 쌍을 만들고 공개키(`.pub`)만 GitHub에 등록했다. 개인키는 PC 밖으로 내보내지 않았고 이 저장소에 포함하지 않는다.
+- 인증 확인: `ssh -T git@github.com` → `Hi linkcontent7-huisun! You've successfully authenticated`
+- 원격 주소를 HTTPS에서 SSH(`git@github.com:...`)로 바꾸고 SSH로 푸시한다.
+- 차이: HTTPS는 토큰으로 인증하고, SSH는 개인키로 인증하므로 토큰 유출 위험이 줄어든다.
+- 트러블슈팅: `gh ssh-key add`가 `admin:public_key` 권한 부족으로 404가 났다. `gh auth refresh -h github.com -s admin:public_key`로 권한을 추가한 뒤 등록에 성공했다.

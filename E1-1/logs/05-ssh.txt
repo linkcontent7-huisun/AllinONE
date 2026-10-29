@@ -1,0 +1,13 @@
+$ ssh-keygen -t ed25519 -C "e1-1-codyssey" -f ~/.ssh/id_ed25519_github -N ""   # 개인키는 PC에만 보관, 문서에 포함하지 않음
+$ ssh-keygen -l -f /c/Users/noh hui sun/.ssh/id_ed25519_github.pub
+256 SHA256:R4jMvlUBWneslFxUwGCi1bvVIq5XTNEFO7JqMPUngak e1-1-codyssey (ED25519)
+
+$ ssh -T git@github.com
+Hi linkcontent7-huisun! You've successfully authenticated, but GitHub does not provide shell access.
+
+$ git remote set-url origin git@github.com:linkcontent7-huisun/AllinONE.git
+
+$ git remote -v
+origin	git@github.com:linkcontent7-huisun/AllinONE.git (fetch)
+origin	git@github.com:linkcontent7-huisun/AllinONE.git (push)
+
